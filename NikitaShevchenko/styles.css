@@ -14,13 +14,13 @@
   --game-cell-boardsize: 6px;
   --cell-size: 3.2rem;
 
-  --number-1-color: #0000ff;
+  --number-1-color: #00f;
   --number-2-color: #008000;
-  --number-3-color: #ff0000;
+  --number-3-color: #f00;
   --number-4-color: #000080;
   --number-5-color: #800000;
   --number-6-color: #008080;
-  --number-7-color: #000000;
+  --number-7-color: #000;
   --number-8-color: #808080;
 }
 
@@ -47,7 +47,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: 'DSEG7';
+  font-family: 'DSEG7', monospace;
   border: var(--game-menu-boardsize) solid;
   border-color: #808080 white white #808080;
   height: var(--game-menu-height);
@@ -84,7 +84,7 @@
 
 .start-game-button-container button {
   background: #c0c0c0;
-  border:none;
+  border: none;
   cursor: pointer;
 }
 
@@ -141,7 +141,7 @@
 }
 
 .game-board > .cell {
-  font-family: 'Press Start 2P';
+  font-family: 'Press Start 2P', monospace;
   outline: 2px solid #808080;
   display: flex;
   justify-content: center;
@@ -162,26 +162,30 @@
   cursor: pointer;
 }
 
-.game-board > .cell.mine > img {
-  display: none;
-}
-
 .game-board > .cell > img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-@media (max-width: 768px) {
+.game-board > .cell.mine {
+  background-image: url('./assets/images/mine.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60%;
+}
+
+@media (width <= 768px) {
   .game-container {
     width: min(94vw, 640px);
   }
+
   .game-board > .cell.opened {
     font-size: 1.8rem;
   }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   body {
     padding: 0.5rem;
   }
@@ -189,7 +193,7 @@
   .game-menu {
     gap: 0.5rem;
   }
-  
+
   .game-board > .cell.opened {
     font-size: 1.5rem;
   }
