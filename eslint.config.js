@@ -1,4 +1,4 @@
-/* eslint-env node */
+/* global require:readonly, module:readonly */
 const js = require('@eslint/js');
 const globals = require('globals');
 
