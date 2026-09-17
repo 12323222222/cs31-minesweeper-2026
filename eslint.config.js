@@ -1,3 +1,4 @@
+/* eslint-env node */
 const js = require('@eslint/js');
 const globals = require('globals');
 

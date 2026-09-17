@@ -96,7 +96,7 @@
 
 .game-board {
   display: grid;
-  grid-template-columns: repeat(16, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--cells-count), minmax(0, 1fr));
   aspect-ratio: 1;
   min-width: 0;
   border: var(--game-board-boardsize) solid;
@@ -173,6 +173,34 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: 60%;
+}
+
+/* Distinct styles for flagged cells so flagged mines and flagged safe cells
+   can be visually distinguished. Markup must add `flagged-mine` or
+   `flagged-safe` to a `.cell.flag` as appropriate; leaving existing `.flag`
+   selector for backward compatibility. */
+.game-board > .cell.flag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-board > .cell.flag.flagged-safe {
+  background-color: rgb(0 128 0 / 15%);
+  border-color: #4caf50 #357a38 #357a38 #4caf50;
+}
+
+.game-board > .cell.flag.flagged-mine {
+  background-color: rgb(244 67 54 / 12%);
+  border-color: #f44336 #b71c1c #b71c1c #f44336;
+}
+
+/* Make exploded mines visually distinct */
+.game-board > .cell.mine.exploded {
+  background-color: #f44336;
+  background-image: url('./assets/images/mine.png');
+  background-size: 70%;
+  background-position: center;
 }
 
 @media (width <= 768px) {
