@@ -123,7 +123,8 @@ body {
 .cell.open[data-value="3"] { color: #f00; }
 .cell.open[data-value="4"] { color: #000080; }
 
-.cell.flagged {
+.cell.flagged-mine,
+.cell.flagged-safe {
   background-color: #b9b9b9;
   border-top: 3px solid #efefef;
   border-left: 3px solid #efefef;
@@ -132,9 +133,18 @@ body {
   cursor: pointer;
 }
 
-.cell.flagged::before {
+.cell.flagged-mine::before,
+.cell.flagged-safe::before {
   content: "🚩";
   font-size: 16px;
+}
+
+.cell.flagged-mine {
+  background-color: #f4b6b6;
+}
+
+.cell.flagged-safe {
+  background-color: #b9b9b9;
 }
 
 .cell.mine {
