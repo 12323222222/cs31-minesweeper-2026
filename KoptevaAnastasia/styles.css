@@ -3,10 +3,10 @@
   --cell-gap: 3px;
   --board-cols: 9;
 
-  --color-bg: #000000;
+  --color-bg: #000;
   --color-panel: #262626;
-  --color-border-light: #ffffff;
-  --color-border-dark: #ffffff;
+  --color-border-light: #fff;
+  --color-border-dark: #fff;
 
   --color-cell-closed: #3f5266;
   --color-cell-closed-hover: #4a6076;
@@ -34,52 +34,52 @@
 }
 
 body {
-  margin: 0;
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg);
+  min-height: 100vh;
+  margin: 0;
+  padding: 16px;
   font-family: "Segoe UI", Roboto, Arial, sans-serif;
   color: var(--color-text);
-  padding: 16px;
+  background: var(--color-bg);
 }
 
 .game {
-  width: 100%;
-  max-width: 480px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
+  max-width: 480px;
 }
 
-.game__header {
+.game-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 10px 16px;
   background: var(--color-panel);
   border: 2px solid var(--color-border-light);
   border-radius: 10px;
-  padding: 10px 16px;
 }
 
 .counter {
   display: flex;
-  align-items: center;
   gap: 6px;
+  align-items: center;
+  justify-content: center;
+  min-width: 76px;
+  padding: 6px 10px;
   background: #0f1720;
   border: 2px solid var(--color-border-dark);
   border-radius: 6px;
-  padding: 6px 10px;
-  min-width: 76px;
-  justify-content: center;
 }
 
-.counter__icon {
+.counter-icon {
   font-size: 1rem;
 }
 
-.counter__value {
+.counter-value {
   font-variant-numeric: tabular-nums;
   font-weight: 700;
   letter-spacing: 2px;
@@ -87,16 +87,16 @@ body {
 }
 
 .restart-btn {
-  width: 250px;
-  height: 48px;
-  border-radius: 10px;
-  border: 2px solid var(--color-border-light);
-  background: var(--color-cell-closed);
-  font-size: 1.4rem;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 250px;
+  height: 48px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  background: var(--color-cell-closed);
+  border: 2px solid var(--color-border-light);
+  border-radius: 10px;
   transition: background 0.15s ease, transform 0.1s ease;
 }
 
@@ -113,139 +113,155 @@ body {
   grid-template-columns: repeat(var(--board-cols), var(--cell-size));
   gap: var(--cell-gap);
   justify-content: center;
+  padding: 12px;
   background: var(--color-panel);
   border: 2px solid var(--color-border-light);
   border-radius: 10px;
-  padding: 12px;
 }
 
 .cell {
-  width: var(--cell-size);
-  height: var(--cell-size);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 1rem;
-  border-radius: 4px;
+  width: var(--cell-size);
+  height: var(--cell-size);
   padding: 0;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
   user-select: none;
+  border-radius: 4px;
 }
 
-.cell--closed {
+.cell-closed {
   background: var(--color-cell-closed);
   border: 2px solid;
-  border-top-color: #6d84a0;
-  border-left-color: #6d84a0;
-  border-bottom-color: #202b38;
-  border-right-color: #202b38;
+  border-color: #6d84a0 #202b38 #202b38 #6d84a0;
 }
 
-.cell--closed:hover {
+.cell-closed:hover {
   background: var(--color-cell-closed-hover);
 }
 
-.cell--closed:active {
+.cell-closed:active {
   transform: translateY(1px);
 }
 
-.cell--open {
+.cell-open {
+  cursor: default;
   background: var(--color-cell-open);
   border: 1px solid var(--color-border-light);
-  cursor: default;
 }
 
-.cell--open.cell--empty {
-  background: var(--color-cell-open);
+.cell-open[data-count="1"] {
+  color: var(--num-1);
 }
 
-.cell--open[data-count="1"] { color: var(--num-1); }
-.cell--open[data-count="2"] { color: var(--num-2); }
-.cell--open[data-count="3"] { color: var(--num-3); }
-.cell--open[data-count="4"] { color: var(--num-4); }
-.cell--open[data-count="5"] { color: var(--num-5); }
-.cell--open[data-count="6"] { color: var(--num-6); }
-.cell--open[data-count="7"] { color: var(--num-7); }
-.cell--open[data-count="8"] { color: var(--num-8); }
+.cell-open[data-count="2"] {
+  color: var(--num-2);
+}
 
-.cell--flagged {
+.cell-open[data-count="3"] {
+  color: var(--num-3);
+}
+
+.cell-open[data-count="4"] {
+  color: var(--num-4);
+}
+
+.cell-open[data-count="5"] {
+  color: var(--num-5);
+}
+
+.cell-open[data-count="6"] {
+  color: var(--num-6);
+}
+
+.cell-open[data-count="7"] {
+  color: var(--num-7);
+}
+
+.cell-open[data-count="8"] {
+  color: var(--num-8);
+}
+
+.cell-flagged {
   background: var(--color-cell-closed);
 }
 
-.cell__flag {
+.cell-flag {
   font-size: 1rem;
   line-height: 1;
 }
 
-.cell--flagged-wrong {
-  background: var(--color-cell-flag-wrong);
+.cell-flagged-wrong {
   position: relative;
+  background: var(--color-cell-flag-wrong);
   box-shadow: 0 0 0 2px var(--color-accent) inset;
 }
 
-.cell__flag-wrong {
-  font-size: 1rem;
+.cell-flag-wrong {
   z-index: 2;
+  font-size: 1rem;
 }
 
-.cell--mine {
+.cell-mine {
   background: var(--color-cell-mine);
   border: 1px solid var(--color-border-light);
 }
 
-.cell__mine {
+.cell-mine-icon {
   font-size: 1rem;
   line-height: 1;
 }
 
-.cell--mine.cell--exploded {
+.cell-mine.cell-exploded {
   background: var(--color-cell-mine-exploded);
   box-shadow: 0 0 0 2px var(--color-accent) inset;
 }
 
 .legend {
+  padding: 14px 16px;
   background: var(--color-panel);
   border: 2px solid var(--color-border-light);
   border-radius: 10px;
-  padding: 14px 16px;
 }
 
-.legend__title {
+.legend-title {
   margin: 0 0 10px;
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--color-text);
 }
 
-.legend__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.legend-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.legend__item {
+.legend-item {
   display: flex;
-  align-items: center;
   gap: 10px;
+  align-items: center;
   font-size: 0.85rem;
 }
 
-.legend__item .cell {
+.legend-item .cell {
   flex-shrink: 0;
   cursor: default;
 }
 
-@media (max-width: 420px) {
+@media (width <= 420px) {
   :root {
     --cell-size: 30px;
     --cell-gap: 2px;
   }
 
-  .game__header {
+  .game-header {
     padding: 8px 10px;
   }
 
@@ -260,12 +276,12 @@ body {
     font-size: 1.2rem;
   }
 
-  .legend__list {
+  .legend-list {
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
 }
 
-@media (max-width: 340px) {
+@media (width <= 340px) {
   :root {
     --cell-size: 26px;
   }
