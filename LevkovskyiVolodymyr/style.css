@@ -1,10 +1,17 @@
+:root {
+    --cell-size: 100px;
+    --transition-duration: 0.3s;
+    --loss-animation-duration: 1s;
+}
+
 header{
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 10px;
     color: #fff;
-    width: 626px;
+    width: 100%;
+    max-width: 626px;
 }
 
 .scores-container{
@@ -25,7 +32,7 @@ header{
 .start-btn:hover{
     cursor: pointer;
     background-color: #ce9306;
-    transition: 0.3s;
+    transition: var(--transition-duration);
 }
 
 .stop-btn{
@@ -41,7 +48,7 @@ header{
 .stop-btn:hover{
     cursor: pointer;
     background-color: #620606;
-    transition: 0.3s;
+    transition: var(--transition-duration);
 }
 
 .btn-container{
@@ -56,7 +63,15 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
 
+.game {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
 }
 
 .board {
@@ -66,8 +81,8 @@ body{
 
 .raw, .column{
    border: 1px solid #fff;
-   width: 100px;
-   height: 100px;
+   width: var(--cell-size);
+   height: var(--cell-size);
    color: #fff;
    text-align: center;
    vertical-align: middle;
@@ -83,7 +98,7 @@ body{
 .game-active .closed:hover{
     cursor: pointer;
     background-color: #273142;
-    transition: 0.3s;
+    transition: var(--transition-duration);
 }
 
 .bombed{
@@ -96,12 +111,16 @@ body{
 }
 
 
-.countdown, .flags-count{
+.countdown, .flags-count, .game-status{
     font-size: 18px;
     padding: 10px;
     color: #000;
     background-color: #fff;
     border-radius: 5px;
+}
+
+.game-status:empty {
+    display: none;
 }
 
 .flagged {
@@ -129,5 +148,20 @@ body{
 
 .first-exploded{
     background-color: #d70a1b;
-    animation: pulsate 1s infinite ease-in-out;
+    animation: pulsate var(--loss-animation-duration) infinite ease-in-out;
+}
+
+@media (width <= 640px) {
+    :root {
+        --cell-size: min(14vw, 55px);
+    }
+
+    header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .raw, .column {
+        font-size: 18px;
+    }
 }

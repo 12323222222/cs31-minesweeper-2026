@@ -1,183 +1,238 @@
+const DIRECTIONS = [
+  [-1, -1], [-1, 0], [-1, 1],
+  [0, -1],           [0, 1],
+  [1, -1],  [1, 0],  [1, 1],
+];
+
+function generateField(rows, cols, minesCount, safeRow = -1, safeCol = -1) {
+  const board = Array.from({ length: rows }, () =>
+    Array.from({ length: cols }, () => ({
+      type: 'empty',
+      neighborMines: 0,
+      state: 'closed',
+    }))
+  );
+
+  let minesPlaced = 0;
+  const maxPossibleMines = rows * cols - (safeRow !== -1 ? 1 : 0);
+  const targetMines = Math.min(minesCount, Math.max(0, maxPossibleMines));
+
+  while (minesPlaced < targetMines) {
+    const r = Math.floor(Math.random() * rows);
+    const c = Math.floor(Math.random() * cols);
+
+    // Exclude safe zone (cell and all its 8 neighbors) if safeRow specified
+    if (safeRow !== -1 && Math.abs(r - safeRow) <= 1 && Math.abs(c - safeCol) <= 1) {
+      continue;
+    }
+    if (board[r][c].type === 'mine') {
+      continue;
+    }
+
+    board[r][c].type = 'mine';
+    minesPlaced++;
+  }
+
+  countNeighbourMines(board, rows, cols);
+  return board;
+}
+
+function countNeighbourMines(board, rows, cols) {
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (board[r][c].type === 'mine') {
+        continue;
+      }
+
+      let count = 0;
+      for (const [dr, dc] of DIRECTIONS) {
+        const nr = r + dr;
+        const nc = c + dc;
+        if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && board[nr][nc].type === 'mine') {
+          count++;
+        }
+      }
+      board[r][c].neighborMines = count;
+    }
+  }
+}
+
 class Game {
-  board = document.querySelectorAll('.column');
   countdown = document.querySelector('.countdown');
   flagsCounter = document.querySelector('.flags-count');
+  gameStatus = document.querySelector('.game-status');
   tableEl = document.querySelector('.board');
+  tbodyEl = document.querySelector('.board tbody');
   startBtn = document.querySelector('.start-btn');
   stopBtn = document.querySelector('.stop-btn');
 
-  seconds = 0;
-  flags = 6;
-  isStarted = false;
-  isGameOver = false;
+  gameState = {
+    rows: 6,
+    cols: 6,
+    minesCount: 6,
+    status: 'stop', // 'stop' | 'process' | 'win' | 'lose'
+    gameTime: 0,
+    timerId: null,
+  };
 
-  rows = 6;
-  cols = 6;
-  minesCount = 6;
-  mesh = [];
+  board = []; // 2D array of cell objects (Lab 2 data layer)
+  flags = 6;
+  firstClick = true;
+  cellElements = []; // 2D array of DOM elements
 
   constructor() {
     this.initEvents();
+    this.createBoardUI();
+    this.initEmptyBoardData();
   }
 
   initEvents() {
     this.startBtn.addEventListener('click', () => this.start());
     this.stopBtn.addEventListener('click', () => this.stop());
-
-    this.board.forEach((cell, index) => {
-      const r = Math.floor(index / this.cols);
-      const c = index % this.cols;
-
-      cell.addEventListener('click', () => this.openCell(r, c));
-      cell.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        this.toggleFlag(r, c);
-      });
-    });
   }
 
-  createMesh(safeRow = -1, safeCol = -1) {
-    this.mesh = Array.from({ length: this.rows }, () =>
-      Array.from({ length: this.cols }, () => ({
-        isMine: false,
-        adjacentMines: 0,
-        isOpened: false,
-        isFlagged: false,
+  initEmptyBoardData() {
+    this.board = Array.from({ length: this.gameState.rows }, () =>
+      Array.from({ length: this.gameState.cols }, () => ({
+        type: 'empty',
+        neighborMines: 0,
+        state: 'closed',
       }))
     );
+  }
 
-    let minesPlaced = 0;
-    while (minesPlaced < this.minesCount) {
-      const r = Math.floor(Math.random() * this.rows);
-      const c = Math.floor(Math.random() * this.cols);
+  createBoardUI() {
+    this.tbodyEl.innerHTML = '';
+    this.cellElements = [];
 
-      // Исключаем саму клетку и все 8 клеток вокруг неё, чтобы гарантировать 0 мин
-      if (safeRow !== -1 && Math.abs(r - safeRow) <= 1 && Math.abs(c - safeCol) <= 1) {
-        continue;
+    for (let r = 0; r < this.gameState.rows; r++) {
+      const tr = document.createElement('tr');
+      tr.className = 'raw';
+      const rowElements = [];
+
+      for (let c = 0; c < this.gameState.cols; c++) {
+        const th = document.createElement('th');
+        th.className = 'column closed';
+
+        th.addEventListener('click', () => this.openCell(r, c));
+        th.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          this.toggleFlag(r, c);
+        });
+
+        tr.appendChild(th);
+        rowElements.push(th);
       }
-      if (this.mesh[r][c].isMine) continue;
 
-      this.mesh[r][c].isMine = true;
-      minesPlaced++;
-    }
-
-    const directions = [
-      [-1, -1], [-1, 0], [-1, 1],
-      [ 0, -1],          [ 0, 1],
-      [ 1, -1], [ 1, 0], [ 1, 1],
-    ];
-
-    for (let r = 0; r < this.rows; r++) {
-      for (let c = 0; c < this.cols; c++) {
-        if (this.mesh[r][c].isMine) continue;
-
-        let count = 0;
-        for (const [dr, dc] of directions) {
-          const nr = r + dr;
-          const nc = c + dc;
-          if (nr >= 0 && nr < this.rows && nc >= 0 && nc < this.cols && this.mesh[nr][nc].isMine) {
-            count++;
-          }
-        }
-        this.mesh[r][c].adjacentMines = count;
-      }
+      this.tbodyEl.appendChild(tr);
+      this.cellElements.push(rowElements);
     }
   }
 
   start() {
-    clearInterval(this.timer);
-    this.isStarted = true;
-    this.isGameOver = false;
+    clearInterval(this.gameState.timerId);
+    this.gameState.status = 'process';
+    this.gameState.gameTime = 0;
     this.firstClick = true;
+
     this.startBtn.disabled = true;
     this.stopBtn.disabled = false;
     this.tableEl.classList.add('game-active');
 
-    this.seconds = 0;
-    this.flags = this.minesCount;
-    this.countdown.textContent = `${this.seconds} s`;
+    this.flags = this.gameState.minesCount;
+    this.countdown.textContent = `${this.gameState.gameTime} s`;
     this.flagsCounter.textContent = `${this.flags} flags`;
+    if (this.gameStatus) {
+      this.gameStatus.textContent = `Mines: ${this.gameState.minesCount}`;
+    }
 
+    this.initEmptyBoardData();
     this.resetBoardUI();
 
-    this.timer = setInterval(() => {
-      this.seconds++;
-      this.countdown.textContent = `${this.seconds} s`;
+    this.gameState.timerId = setInterval(() => {
+      this.gameState.gameTime++;
+      this.countdown.textContent = `${this.gameState.gameTime} s`;
     }, 1000);
   }
 
   stop() {
-    this.isStarted = false;
-    this.isGameOver = true;
+    this.gameState.status = 'stop';
     this.firstClick = true;
     this.startBtn.disabled = false;
     this.stopBtn.disabled = true;
     this.tableEl.classList.remove('game-active');
-    clearInterval(this.timer);
+
+    clearInterval(this.gameState.timerId);
+    this.gameState.timerId = null;
+
+    this.initEmptyBoardData();
     this.resetBoardUI();
-    this.seconds = 0;
+
+    this.gameState.gameTime = 0;
     this.countdown.textContent = '0 s';
+    this.flags = 0;
     this.flagsCounter.textContent = '0 flags';
+    if (this.gameStatus) {
+      this.gameStatus.textContent = '';
+    }
   }
 
   resetBoardUI() {
-    this.board.forEach((cell) => {
-      cell.className = 'column closed';
-      cell.textContent = '';
-    });
-  }
-
-  getCellElement(r, c) {
-    return this.board[r * this.cols + c];
+    for (let r = 0; r < this.gameState.rows; r++) {
+      for (let c = 0; c < this.gameState.cols; c++) {
+        const cellEl = this.cellElements[r][c];
+        cellEl.className = 'column closed';
+        cellEl.textContent = '';
+      }
+    }
   }
 
   openCell(r, c) {
-    if (!this.isStarted || this.isGameOver) return;
+    if (this.gameState.status !== 'process') return;
 
     if (this.firstClick) {
-      this.createMesh(r, c);
+      this.board = generateField(
+        this.gameState.rows,
+        this.gameState.cols,
+        this.gameState.minesCount,
+        r,
+        c
+      );
       this.firstClick = false;
     }
 
-    const cellData = this.mesh[r][c];
-    if (cellData.isOpened || cellData.isFlagged) return;
+    const cellData = this.board[r][c];
+    if (cellData.state === 'opened' || cellData.state === 'flagged') return;
 
-    // Попадание на мину
-    if (cellData.isMine) {
+    if (cellData.type === 'mine') {
       this.gameOver(r, c);
       return;
     }
 
     this.revealCell(r, c);
 
-    // Проверка на победу
     if (this.checkWin()) {
       this.winGame();
     }
   }
 
   revealCell(r, c) {
-    const cellData = this.mesh[r][c];
-    if (cellData.isOpened || cellData.isFlagged || cellData.isMine) return;
+    const cellData = this.board[r][c];
+    if (cellData.state === 'opened' || cellData.state === 'flagged' || cellData.type === 'mine') {
+      return;
+    }
 
-    cellData.isOpened = true;
-    const cellEl = this.getCellElement(r, c);
+    cellData.state = 'opened';
+    const cellEl = this.cellElements[r][c];
     cellEl.classList.remove('closed');
     cellEl.classList.add('opened');
-    cellEl.textContent = cellData.adjacentMines || '';
+    cellEl.textContent = cellData.neighborMines || '';
 
-    // Если вокруг нет мин, открываем соседние клетки каскадом
-    if (cellData.adjacentMines === 0) {
-      const directions = [
-        [-1, -1], [-1, 0], [-1, 1],
-        [ 0, -1],          [ 0, 1],
-        [ 1, -1], [ 1, 0], [ 1, 1],
-      ];
-
-      for (const [dr, dc] of directions) {
+    if (cellData.neighborMines === 0) {
+      for (const [dr, dc] of DIRECTIONS) {
         const nr = r + dr;
         const nc = c + dc;
-        if (nr >= 0 && nr < this.rows && nc >= 0 && nc < this.cols) {
+        if (nr >= 0 && nr < this.gameState.rows && nc >= 0 && nc < this.gameState.cols) {
           this.revealCell(nr, nc);
         }
       }
@@ -185,21 +240,21 @@ class Game {
   }
 
   toggleFlag(r, c) {
-    if (!this.isStarted || this.isGameOver) return;
+    if (this.gameState.status !== 'process') return;
 
-    const cellData = this.mesh[r][c];
-    if (cellData.isOpened) return;
+    const cellData = this.board[r][c];
+    if (cellData.state === 'opened') return;
 
-    const cellEl = this.getCellElement(r, c);
+    const cellEl = this.cellElements[r][c];
 
-    if (cellData.isFlagged) {
-      cellData.isFlagged = false;
+    if (cellData.state === 'flagged') {
+      cellData.state = 'closed';
       this.flags++;
       cellEl.classList.remove('flagged');
       cellEl.textContent = '';
     } else {
       if (this.flags <= 0) return;
-      cellData.isFlagged = true;
+      cellData.state = 'flagged';
       this.flags--;
       cellEl.classList.add('flagged');
       cellEl.textContent = '🚩';
@@ -213,24 +268,24 @@ class Game {
   }
 
   gameOver(explodedR, explodedC) {
-    this.isStarted = false;
-    this.isGameOver = true;
+    this.gameState.status = 'lose';
     this.startBtn.disabled = false;
     this.stopBtn.disabled = true;
     this.tableEl.classList.remove('game-active');
-    clearInterval(this.timer);
 
-    // Раскрываем все поле: мины, цифры и ошибочные флаги
-    for (let r = 0; r < this.rows; r++) {
-      for (let c = 0; c < this.cols; c++) {
-        const cellData = this.mesh[r][c];
-        const cellEl = this.getCellElement(r, c);
+    clearInterval(this.gameState.timerId);
+    this.gameState.timerId = null;
+
+    for (let r = 0; r < this.gameState.rows; r++) {
+      for (let c = 0; c < this.gameState.cols; c++) {
+        const cellData = this.board[r][c];
+        const cellEl = this.cellElements[r][c];
 
         if (r === explodedR && c === explodedC) {
           cellEl.className = 'column first-exploded';
           cellEl.textContent = '💣';
-        } else if (cellData.isMine) {
-          if (cellData.isFlagged) {
+        } else if (cellData.type === 'mine') {
+          if (cellData.state === 'flagged') {
             cellEl.className = 'column flagged';
             cellEl.textContent = '🚩';
           } else {
@@ -238,25 +293,27 @@ class Game {
             cellEl.textContent = '💣';
           }
         } else {
-          // Безопасная клетка
-          if (cellData.isFlagged) {
+          if (cellData.state === 'flagged') {
             cellEl.className = 'column flagged wrong';
             cellEl.textContent = '🚩';
           } else {
             cellEl.className = 'column opened';
-            cellEl.textContent = cellData.adjacentMines || '';
+            cellEl.textContent = cellData.neighborMines || '';
           }
         }
       }
     }
+
+    if (this.gameStatus) {
+      this.gameStatus.textContent = 'Game Over! You hit a mine.';
+    }
   }
 
   checkWin() {
-    for (let r = 0; r < this.rows; r++) {
-      for (let c = 0; c < this.cols; c++) {
-        const cellData = this.mesh[r][c];
-        // Если хоть одна безопасная клетка не открыта — игра еще не выиграна
-        if (!cellData.isMine && !cellData.isOpened) {
+    for (let r = 0; r < this.gameState.rows; r++) {
+      for (let c = 0; c < this.gameState.cols; c++) {
+        const cellData = this.board[r][c];
+        if (cellData.type !== 'mine' && cellData.state !== 'opened') {
           return false;
         }
       }
@@ -265,9 +322,17 @@ class Game {
   }
 
   winGame() {
+    this.gameState.status = 'win';
     this.tableEl.classList.remove('game-active');
-    this.stop();
-    alert(`Поздравляем! Вы победили за ${this.seconds} секунд!`);
+    this.startBtn.disabled = false;
+    this.stopBtn.disabled = true;
+
+    clearInterval(this.gameState.timerId);
+    this.gameState.timerId = null;
+
+    if (this.gameStatus) {
+      this.gameStatus.textContent = `You win! Time: ${this.gameState.gameTime} s`;
+    }
   }
 }
 
