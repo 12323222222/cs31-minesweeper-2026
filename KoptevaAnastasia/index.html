@@ -9,7 +9,7 @@
 <body>
   <main class="game">
     <header class="game-header">
-      <div class="counter counter-flags" title="Number of flags">
+      <div class="counter counter-flags" title="Number of flags" role="status" aria-live="polite">
         <span class="counter-icon" aria-hidden="true">🏳️</span>
         <span class="counter-value" id="flags-count">000</span>
       </div>
@@ -111,37 +111,37 @@
       <h2 class="legend-title">Cells</h2>
       <ul class="legend-list">
         <li class="legend-item">
-          <button class="cell cell-closed" type="button" aria-hidden="true"></button>
+          <button class="cell cell-closed" type="button" tabindex="-1" aria-hidden="true"></button>
           <span>Closed</span>
         </li>
         <li class="legend-item">
-          <button class="cell cell-open" type="button" aria-hidden="true"></button>
+          <button class="cell cell-open" type="button" tabindex="-1" aria-hidden="true"></button>
           <span>Open</span>
         </li>
         <li class="legend-item">
-          <button class="cell cell-open" type="button" data-count="3" aria-hidden="true">3</button>
+          <button class="cell cell-open" type="button" data-count="3" tabindex="-1" aria-hidden="true">3</button>
           <span>Open with a number</span>
         </li>
         <li class="legend-item">
-          <button class="cell cell-closed cell-flagged" type="button" aria-hidden="true">
+          <button class="cell cell-closed cell-flagged" type="button" tabindex="-1" aria-hidden="true">
             <span class="cell-flag" aria-hidden="true">🏳️</span>
           </button>
           <span>Flag on mine</span>
         </li>
         <li class="legend-item">
-          <button class="cell cell-closed cell-flagged-wrong" type="button" aria-hidden="true">
+          <button class="cell cell-closed cell-flagged-wrong" type="button" tabindex="-1" aria-hidden="true">
             <span class="cell-flag-wrong" aria-hidden="true">🏴</span>
           </button>
           <span>Flag without mine</span>
         </li>
         <li class="legend-item">
-          <button class="cell cell-mine" type="button" aria-hidden="true">
+          <button class="cell cell-mine" type="button" tabindex="-1" aria-hidden="true">
             <span class="cell-mine-icon" aria-hidden="true">💣</span>
           </button>
           <span>Mine</span>
         </li>
         <li class="legend-item">
-          <button class="cell cell-mine cell-exploded" type="button" aria-hidden="true">
+          <button class="cell cell-mine cell-exploded" type="button" tabindex="-1" aria-hidden="true">
             <span class="cell-mine-icon" aria-hidden="true">🔥</span>
           </button>
           <span>Clicked mine</span>
