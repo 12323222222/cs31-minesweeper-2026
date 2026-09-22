@@ -113,7 +113,9 @@ body {
   color: var(--text-color);
   font-size: clamp(0.85rem, 3vw, 1.35rem);
   font-weight: 800;
+  cursor: pointer;
   user-select: none;
+  transition: background-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
 }
 
 .cell.closed,
@@ -129,6 +131,28 @@ body {
 .cell.exploded {
   border: 1px solid #d5e1eb;
   background: var(--opened-color);
+}
+
+.cell:hover {
+  background: #c9dff0;
+  box-shadow: 0 0 0 0.12rem rgba(53, 109, 156, 0.24);
+}
+
+.cell.closed:hover,
+.cell.flag:hover {
+  background: #a5c2d9;
+}
+
+.cell:active {
+  background: #91aec5;
+  box-shadow: inset 0 0.18rem 0.3rem rgba(33, 53, 71, 0.3);
+  transform: translateY(0.12rem);
+}
+
+.cell.opened:active,
+.cell.mine:active,
+.cell.exploded:active {
+  background: #c5d5e2;
 }
 
 .cell.number-one {
