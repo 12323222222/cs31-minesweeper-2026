@@ -1,0 +1,195 @@
+:root {
+  --background-color: #dce8f3;
+  --surface-color: #f7fbff;
+  --surface-shadow: rgba(61, 86, 111, 0.22);
+  --text-color: #213547;
+  --muted-color: #6b7c8d;
+  --cell-size: min(10vw, 4.1rem);
+  --cell-gap: 0.3rem;
+  --board-size: calc((var(--cell-size) * 8) + (var(--cell-gap) * 7));
+  --closed-color: #b9cde0;
+  --opened-color: #e7eef5;
+  --accent-color: #356d9c;
+  --danger-color: #e36b67;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: linear-gradient(145deg, #f4f9fd, var(--background-color));
+  color: var(--text-color);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.game {
+  width: min(100%, 40rem);
+  padding: clamp(1rem, 4vw, 2rem);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 1.25rem;
+  background: var(--surface-color);
+  box-shadow: 0 1rem 2.5rem var(--surface-shadow);
+}
+
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.status-panel {
+  min-width: 5.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.75rem;
+  background: #edf4fa;
+  text-align: center;
+}
+
+.status-label {
+  color: var(--muted-color);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.timer,
+.flag-counter {
+  color: var(--accent-color);
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.restart-button {
+  width: 3.5rem;
+  height: 3.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0.35rem 0.75rem rgba(61, 86, 111, 0.18);
+  cursor: pointer;
+  font-size: 1.7rem;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.restart-button:hover,
+.restart-button:focus-visible {
+  transform: translateY(-0.15rem);
+  box-shadow: 0 0.55rem 1rem rgba(61, 86, 111, 0.25);
+}
+
+.restart-button:focus-visible {
+  outline: 0.2rem solid var(--accent-color);
+  outline-offset: 0.2rem;
+}
+
+.board {
+  width: var(--board-size);
+  max-width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: var(--cell-gap);
+}
+
+.cell {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 0.35rem;
+  color: var(--text-color);
+  font-size: clamp(0.85rem, 3vw, 1.35rem);
+  font-weight: 800;
+  user-select: none;
+}
+
+.cell.closed,
+.cell.flag {
+  border: 0.15rem solid #d9e6f1;
+  border-right-color: #88a4bb;
+  border-bottom-color: #88a4bb;
+  background: var(--closed-color);
+}
+
+.cell.opened,
+.cell.mine,
+.cell.exploded {
+  border: 1px solid #d5e1eb;
+  background: var(--opened-color);
+}
+
+.cell.number-one {
+  color: #2d72b0;
+}
+
+.cell.number-two {
+  color: #35854d;
+}
+
+.cell.number-three {
+  color: #b64c41;
+}
+
+.cell.flag::after {
+  content: "🚩";
+  font-size: clamp(1rem, 3vw, 1.5rem);
+}
+
+.cell.mine::after {
+  content: "💣";
+  font-size: clamp(1rem, 3vw, 1.5rem);
+}
+
+.cell.exploded {
+  border-color: #c84e4a;
+  background: var(--danger-color);
+}
+
+.cell.exploded::after {
+  content: "💣";
+  font-size: clamp(1rem, 3vw, 1.5rem);
+}
+
+.game-message {
+  margin: 1.25rem 0 0;
+  color: var(--muted-color);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+@media (max-width: 420px) {
+  body {
+    padding: 0.75rem;
+  }
+
+  .game {
+    padding: 0.85rem;
+  }
+
+  .game-header {
+    gap: 0.5rem;
+  }
+
+  .status-panel {
+    min-width: 4.7rem;
+    padding-inline: 0.5rem;
+  }
+
+  .restart-button {
+    width: 3rem;
+    height: 3rem;
+  }
+}
