@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Minesweeper</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <button type="button">Restart</button>
+      <span id="timer">Time: 0</span>
+      <span id="flags-counter">Flags: 0 / 10</span>
+      <label class="mode-toggle">
+        <input type="checkbox" id="flag-mode" aria-label="Switch between dig and flag mode" />
+        <span class="mode-toggle__option" aria-hidden="true">&#9935;</span>
+        <span class="mode-toggle__option" aria-hidden="true">&#128681;</span>
+      </label>
+    </header>
+    <main>
+      <div class="board">
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 1, column 1, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 1, column 1, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 1, column 2, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 1, column 2, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 1, column 3, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 1, column 3, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 1, column 4, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 1, column 4, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 1, column 5, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 1, column 5, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 1, column 6, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 1, column 6, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="2"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 1, column 7, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 1, column 7, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="2"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 1, column 8, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 1, column 8, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="3"></span>
+        </div>
+        <div class="cell mine">
+          <input type="checkbox" class="reveal" aria-label="Row 1, column 9, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 1, column 9, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 2, column 1, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 2, column 1, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 2, column 2, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 2, column 2, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 2, column 3, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 2, column 3, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 2, column 4, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 2, column 4, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 2, column 5, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 2, column 5, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell mine">
+          <input type="checkbox" class="reveal" aria-label="Row 2, column 6, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 2, column 6, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell mine">
+          <input type="checkbox" class="reveal" aria-label="Row 2, column 7, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 2, column 7, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 2, column 8, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 2, column 8, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="3"></span>
+        </div>
+        <div class="cell mine">
+          <input type="checkbox" class="reveal" aria-label="Row 2, column 9, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 2, column 9, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 3, column 1, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 3, column 1, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="2"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 3, column 2, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 3, column 2, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="2"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 3, column 3, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 3, column 3, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 3, column 4, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 3, column 4, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 3, column 5, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 3, column 5, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 3, column 6, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 3, column 6, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="2"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 3, column 7, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 3, column 7, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="2"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 3, column 8, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 3, column 8, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="2"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 3, column 9, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 3, column 9, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell mine">
+          <input type="checkbox" class="reveal" aria-label="Row 4, column 1, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 4, column 1, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell mine">
+          <input type="checkbox" class="reveal" aria-label="Row 4, column 2, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 4, column 2, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 4, column 3, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 4, column 3, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 4, column 4, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 4, column 4, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 4, column 5, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 4, column 5, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 4, column 6, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 4, column 6, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 4, column 7, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 4, column 7, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 4, column 8, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 4, column 8, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 4, column 9, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 4, column 9, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 5, column 1, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 5, column 1, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="2"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 5, column 2, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 5, column 2, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="3"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 5, column 3, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 5, column 3, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="2"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 5, column 4, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 5, column 4, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 5, column 5, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 5, column 5, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 5, column 6, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 5, column 6, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 5, column 7, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 5, column 7, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 5, column 8, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 5, column 8, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 5, column 9, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 5, column 9, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 6, column 1, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 6, column 1, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="2"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 6, column 2, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 6, column 2, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="3"></span>
+        </div>
+        <div class="cell mine">
+          <input type="checkbox" class="reveal" aria-label="Row 6, column 3, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 6, column 3, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 6, column 4, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 6, column 4, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 6, column 5, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 6, column 5, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 6, column 6, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 6, column 6, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 6, column 7, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 6, column 7, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 6, column 8, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 6, column 8, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 6, column 9, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 6, column 9, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell mine">
+          <input type="checkbox" class="reveal" aria-label="Row 7, column 1, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 7, column 1, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell mine">
+          <input type="checkbox" class="reveal" aria-label="Row 7, column 2, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 7, column 2, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 7, column 3, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 7, column 3, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="2"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 7, column 4, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 7, column 4, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 7, column 5, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 7, column 5, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 7, column 6, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 7, column 6, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 7, column 7, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 7, column 7, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 7, column 8, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 7, column 8, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 7, column 9, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 7, column 9, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 8, column 1, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 8, column 1, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="2"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 8, column 2, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 8, column 2, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="2"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 8, column 3, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 8, column 3, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 8, column 4, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 8, column 4, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 8, column 5, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 8, column 5, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 8, column 6, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 8, column 6, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 8, column 7, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 8, column 7, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 8, column 8, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 8, column 8, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 8, column 9, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 8, column 9, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 9, column 1, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 9, column 1, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 9, column 2, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 9, column 2, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 9, column 3, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 9, column 3, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 9, column 4, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 9, column 4, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 9, column 5, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 9, column 5, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 9, column 6, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 9, column 6, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell mine">
+          <input type="checkbox" class="reveal" aria-label="Row 9, column 7, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 9, column 7, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 9, column 8, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 9, column 8, flag" />
+          <span class="cover"></span>
+          <span class="content" data-count="1"></span>
+        </div>
+        <div class="cell">
+          <input type="checkbox" class="reveal" aria-label="Row 9, column 9, closed" />
+          <input type="checkbox" class="flag" aria-label="Row 9, column 9, flag" />
+          <span class="cover"></span>
+          <span class="content"></span>
+        </div>
+      </div>
+      <p id="game-message" role="status" aria-live="polite"></p>
+    </main>
+  </body>
+</html>

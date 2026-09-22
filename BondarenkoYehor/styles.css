@@ -1,0 +1,279 @@
+:root {
+  --board-columns: 9;
+  --cell-size: 2.5rem;
+  --cell-gap: 2px;
+  --cell-font-size: 1.2rem;
+  --board-width: calc(
+    var(--board-columns) * var(--cell-size) + (var(--board-columns) + 1) *
+      var(--cell-gap)
+  );
+
+  --color-page: #f2f2f2;
+  --color-text: #222;
+  --color-board: #999;
+  --color-cover: #ccc;
+  --color-cover-hover: #d9d9d9;
+  --color-opened: #f7f7f7;
+  --color-mine-hit: #e0a0a0;
+  --color-flag-correct: #bfe3c3;
+  --color-flag-wrong: #e0a0a0;
+  --color-focus: #4d7cc7;
+  --color-win: #2e7d32;
+  --color-lose: #b3261e;
+
+  --color-number-1: #1a5fd0;
+  --color-number-2: #2e7d32;
+  --color-number-3: #c0392b;
+  --color-number-4: #5b3aa0;
+  --color-number-5: #8d5a1a;
+  --color-number-6: #1c7a83;
+  --color-number-7: #222;
+  --color-number-8: #666;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+  padding: 1.5rem 1rem;
+  background: var(--color-page);
+  color: var(--color-text);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  width: var(--board-width);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+header button {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--color-board);
+  border-radius: 0.25rem;
+  background: var(--color-opened);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+header button:hover {
+  background: var(--color-cover-hover);
+}
+
+header button:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.mode-toggle {
+  position: relative;
+  display: flex;
+  border: 1px solid var(--color-board);
+  border-radius: 0.25rem;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.mode-toggle input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.mode-toggle__option {
+  padding: 0.35rem 0.6rem;
+  background: var(--color-opened);
+}
+
+.mode-toggle input:checked ~ .mode-toggle__option:first-child {
+  background: var(--color-cover);
+}
+
+.mode-toggle input:not(:checked) ~ .mode-toggle__option:last-child {
+  background: var(--color-cover);
+}
+
+.mode-toggle input:focus-visible ~ .mode-toggle__option:first-child {
+  outline: 2px solid var(--color-focus);
+  outline-offset: -2px;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(var(--board-columns), var(--cell-size));
+  gap: var(--cell-gap);
+  width: var(--board-width);
+  padding: var(--cell-gap);
+  background: var(--color-board);
+}
+
+.cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background: var(--color-opened);
+  font-size: var(--cell-font-size);
+  font-weight: 700;
+  user-select: none;
+}
+
+.cell input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.cell .flag {
+  pointer-events: none;
+}
+
+.reveal:checked {
+  pointer-events: none;
+}
+
+body:has(#flag-mode:checked) .cell .reveal {
+  pointer-events: none;
+}
+
+body:has(#flag-mode:checked) .cell .flag {
+  pointer-events: auto;
+}
+
+.cell:has(.flag:checked) .reveal {
+  pointer-events: none;
+}
+
+.cell:has(.reveal:checked) .flag {
+  pointer-events: none;
+}
+
+.cover {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--color-cover);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+body:has(.mode-toggle input:not(:checked)) .cell:hover .cover {
+  background: var(--color-cover-hover);
+}
+
+.flag:checked ~ .cover::after {
+  content: '\1F6A9';
+}
+
+.reveal:checked ~ .cover {
+  display: none;
+}
+
+.content::after {
+  content: attr(data-count);
+}
+
+.mine .content::after {
+  content: '\1F4A3';
+}
+
+.content[data-count='1'] {
+  color: var(--color-number-1);
+}
+
+.content[data-count='2'] {
+  color: var(--color-number-2);
+}
+
+.content[data-count='3'] {
+  color: var(--color-number-3);
+}
+
+.content[data-count='4'] {
+  color: var(--color-number-4);
+}
+
+.content[data-count='5'] {
+  color: var(--color-number-5);
+}
+
+.content[data-count='6'] {
+  color: var(--color-number-6);
+}
+
+.content[data-count='7'] {
+  color: var(--color-number-7);
+}
+
+.content[data-count='8'] {
+  color: var(--color-number-8);
+}
+
+.mine:has(.reveal:checked) {
+  background: var(--color-mine-hit);
+}
+
+body:has(.mine .reveal:checked) .cell input {
+  pointer-events: none;
+}
+
+body:has(.mine .reveal:checked) .mine .cover {
+  display: none;
+}
+
+body:has(.mine .reveal:checked) .cell:has(.flag:checked).mine .cover {
+  display: grid;
+  background: var(--color-flag-correct);
+}
+
+body:has(.mine .reveal:checked) .cell:has(.flag:checked):not(.mine) .cover {
+  background: var(--color-flag-wrong);
+}
+
+body:has(.mine .reveal:checked) .cell:has(.flag:checked):not(.mine) .cover::after {
+  content: '\1F6A9\274C';
+  font-size: 0.85rem;
+}
+
+#game-message {
+  min-height: 1.4rem;
+  margin: 0;
+  font-weight: 600;
+  text-align: center;
+}
+
+body:has(.mine .reveal:checked) #game-message {
+  color: var(--color-lose);
+}
+
+body:has(.mine .reveal:checked) #game-message::after {
+  content: 'Game over: you opened a mine';
+}
+
+.board:not(:has(.mine .reveal:checked, .cell:not(.mine) .reveal:not(:checked)))
+  ~ #game-message {
+  color: var(--color-win);
+}
+
+.board:not(:has(.mine .reveal:checked, .cell:not(.mine) .reveal:not(:checked)))
+  ~ #game-message::after {
+  content: 'You win!';
+}
