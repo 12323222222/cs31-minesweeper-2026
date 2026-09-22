@@ -289,3 +289,16 @@ main {
     padding: 3px;
   }
 }
+
+#game-message {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+  border: 1px solid #d94a43;
+  border-radius: 6px;
+  background: #fff0ef;
+  color: #b8322c;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(185, 50, 44, 0.08);
+}
