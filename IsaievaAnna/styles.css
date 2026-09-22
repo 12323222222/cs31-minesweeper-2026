@@ -40,6 +40,9 @@
   --focus-color: #6aa3d8;
   --light-text: #fff;
 
+  --transition-fast: 0.1s;
+  --transition-standard: 0.15s;
+
   --shadow: 0 0.75rem 2rem rgb(70 110 145 / 18%);
 }
 
@@ -91,7 +94,9 @@ body {
   color: var(--text-color);
   font-size: 1.3rem;
   cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s ease;
+  transition:
+    transform var(--transition-standard) ease,
+    background var(--transition-standard) ease;
 }
 
 .restart-button:hover {
@@ -142,7 +147,9 @@ body {
   font-size: var(--cell-font-size);
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.1s ease, background 0.15s ease;
+  transition:
+    transform var(--transition-fast) ease,
+    background var(--transition-standard) ease;
 }
 
 .cell-closed {
