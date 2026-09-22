@@ -1,14 +1,14 @@
 :root {
-  /*кольори  інтерфейсу */
+  /* кольори  інтерфейсу */
   --panel: #c6c6c6;
-  --ink: #111111;
-  --muted: #555555;
+  --ink: #111;
+  --muted: #555;
   --closed: #c0c0c0;
   --open: #bdbdbd;
-  --open-border: #999999;
+  --open-border: #999;
   --danger: #d44336;
   --danger-dark: #962519;
-  --shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+  --shadow: 0 8px 18px rgb(0 0 0 / 30%);
   --board-columns: 8;
   --cell-min: 28px;
   --cell-min-mobile: 26px;
@@ -45,7 +45,7 @@ button {
   width: min(100%, 560px);
   padding: 12px;
   border: 3px solid;
-  border-color: #ffffff #404040 #404040 #ffffff;
+  border-color: #fff #404040 #404040 #fff;
   border-radius: 4px;
   background: var(--panel);
   box-shadow: var(--shadow);
@@ -58,7 +58,7 @@ button {
   gap: 10px;
   padding: 10px;
   border: 3px solid;
-  border-color: #777777 #ffffff #ffffff #777777;
+  border-color: #777 #fff #fff #777;
   background: #c0c0c0;
   align-items: center;
 }
@@ -75,8 +75,8 @@ button {
   place-items: center;
   padding: 4px 7px;
   border: 3px solid;
-  border-color: #404040 #ffffff #ffffff #404040;
-  background: #000000;
+  border-color: #404040 #fff #fff #404040;
+  background: #000;
 }
 
 .status-label {
@@ -94,7 +94,7 @@ button {
   font-weight: 700;
   line-height: 1;
   letter-spacing: 0.08em;
-  color: #ff0000;
+  color: #f00;
   text-shadow: 2px 0 #8b0000;
 }
 
@@ -106,7 +106,7 @@ button {
   min-width: 58px;
   padding: 0;
   border: 3px solid;
-  border-color: #ffffff #404040 #404040 #ffffff;
+  border-color: #fff #404040 #404040 #fff;
   background: #c0c0c0;
   cursor: pointer;
 }
@@ -116,7 +116,7 @@ button {
 }
 
 .start-button:active {
-  border-color: #404040 #ffffff #ffffff #404040;
+  border-color: #404040 #fff #fff #404040;
 }
 
 .face {
@@ -139,12 +139,10 @@ button {
   display: grid;
   grid-template-columns: repeat(var(--board-columns), minmax(var(--cell-min), 1fr));
   gap: 0;
-  row-gap: 0;
-  column-gap: 0;
   width: 100%;
   padding: 3px;
   border: 6px solid;
-  border-color: #777777 #ffffff #ffffff #777777;
+  border-color: #777 #fff #fff #777;
   border-radius: 3px;
   background: #c0c0c0;
 }
@@ -157,7 +155,7 @@ button {
   aspect-ratio: 1;
   min-width: 0;
   border: 4px solid;
-  border-color: #ffffff #7b7b7b #7b7b7b #ffffff;
+  border-color: #fff #7b7b7b #7b7b7b #fff;
   border-radius: 0;
   font-size: clamp(1rem, 5vw, 1.55rem);
   font-weight: 800;
@@ -167,67 +165,72 @@ button {
 }
 
 .cell:focus-visible {
-  outline: 3px solid rgba(19, 125, 111, 0.35);
+  outline: 3px solid rgb(19 125 111 / 35%);
   outline-offset: 2px;
 }
 
-.cell--closed,
-.cell--flag,
-.cell--question {
+.cell-closed,
+.cell-flag,
+.cell-question {
   /* закрита клітинка */
   background: var(--closed);
   box-shadow: none;
 }
 
-.cell--closed:hover,
-.cell--flag:hover,
-.cell--question:hover {
+.cell-question {
+  color: #111;
+  content: "";
+}
+
+.cell-closed:hover,
+.cell-flag:hover,
+.cell-question:hover {
   filter: brightness(1.05);
 }
 
-.cell--open {
-  /* відкрита клітинка*/
+.cell-open {
+  /* відкрита клітинка */
   color: var(--muted);
   background: var(--open);
   border: 4px solid var(--open-border);
-  box-shadow: inset 0 2px 4px rgba(52, 68, 76, 0.08);
+  box-shadow: inset 0 2px 4px rgb(52 68 76 / 8%);
   cursor: default;
 }
 
-.cell--one {
+.cell-one {
   color: #1867b7;
 }
 
-.cell--two {
+.cell-two {
   color: #2c8f56;
 }
 
-.cell--three {
+.cell-three {
   color: #c43d31;
 }
 
-.cell--four {
+.cell-four {
   color: #000083;
 }
 
-.cell--five {
+.cell-five {
   color: #881212;
 }
 
-.cell--six {
+.cell-six {
   color: #008284;
 }
 
-.cell--seven {
+.cell-seven {
   color: #d501e8;
 }
 
-.cell--eight {
+.cell-eight {
   color: #f6fa00;
 }
 
-.cell--flag::before {
-  /*прапор*/
+.cell-flag::before {
+  /* прапор */
   content: "";
   position: absolute;
   inset: 17%;
@@ -235,12 +238,12 @@ button {
   image-rendering: pixelated;
 }
 
-.cell--flag.cell--mine::before {
+.cell-flag.cell-mine::before {
   inset: 14%;
   background-image: url("assets/mine.png");
 }
 
-.cell--flag.cell--mine::after {
+.cell-flag.cell-mine::after {
   content: "";
   position: absolute;
   inset: 17%;
@@ -248,12 +251,7 @@ button {
   image-rendering: pixelated;
 }
 
-.cell--question {
-  color: #111111;
-  content: "";
-}
-
-.cell--mine::before {
+.cell-mine::before {
   content: "";
   position: absolute;
   inset: 14%;
@@ -261,18 +259,18 @@ button {
   image-rendering: pixelated;
 }
 
-.cell--exploded {
+.cell-exploded {
   /* міна після натискання */
   background: var(--danger);
   border-color: var(--danger-dark);
-  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 0 0 3px rgb(255 255 255 / 28%);
 }
 
-.cell--exploded::before {
+.cell-exploded::before {
   background-image: url("assets/mine-hit.png");
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .game-shell {
     padding: 14px;
   }
