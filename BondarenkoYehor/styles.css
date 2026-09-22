@@ -7,7 +7,6 @@
     var(--board-columns) * var(--cell-size) + (var(--board-columns) + 1) *
       var(--cell-gap)
   );
-
   --color-page: #f2f2f2;
   --color-text: #222;
   --color-board: #999;
@@ -20,7 +19,6 @@
   --color-focus: #4d7cc7;
   --color-win: #2e7d32;
   --color-lose: #b3261e;
-
   --color-number-1: #1a5fd0;
   --color-number-2: #2e7d32;
   --color-number-3: #c0392b;
@@ -94,20 +92,20 @@ header button:focus-visible {
   cursor: pointer;
 }
 
-.mode-toggle__option {
+.mode-toggle-option {
   padding: 0.35rem 0.6rem;
   background: var(--color-opened);
 }
 
-.mode-toggle input:checked ~ .mode-toggle__option:first-child {
+.mode-toggle input:checked ~ .mode-toggle-option:first-child {
   background: var(--color-cover);
 }
 
-.mode-toggle input:not(:checked) ~ .mode-toggle__option:last-child {
+.mode-toggle input:not(:checked) ~ .mode-toggle-option:last-child {
   background: var(--color-cover);
 }
 
-.mode-toggle input:focus-visible ~ .mode-toggle__option:first-child {
+.mode-toggle input:focus-visible ~ .mode-toggle-option:first-child {
   outline: 2px solid var(--color-focus);
   outline-offset: -2px;
 }
@@ -149,20 +147,20 @@ header button:focus-visible {
   pointer-events: none;
 }
 
-body:has(#flag-mode:checked) .cell .reveal {
-  pointer-events: none;
-}
-
-body:has(#flag-mode:checked) .cell .flag {
-  pointer-events: auto;
-}
-
 .cell:has(.flag:checked) .reveal {
   pointer-events: none;
 }
 
 .cell:has(.reveal:checked) .flag {
   pointer-events: none;
+}
+
+body:has(#flag-mode:checked) .cell .reveal {
+  pointer-events: none;
+}
+
+body:has(#flag-mode:checked) .cell .flag {
+  pointer-events: auto;
 }
 
 .cover {
@@ -173,10 +171,6 @@ body:has(#flag-mode:checked) .cell .flag {
   background: var(--color-cover);
   font-size: 1.1rem;
   pointer-events: none;
-}
-
-body:has(.mode-toggle input:not(:checked)) .cell:hover .cover {
-  background: var(--color-cover-hover);
 }
 
 .flag:checked ~ .cover::after {
@@ -237,6 +231,10 @@ body:has(.mine .reveal:checked) .cell input {
 
 body:has(.mine .reveal:checked) .mine .cover {
   display: none;
+}
+
+body:has(.mode-toggle input:not(:checked)) .cell:hover .cover {
+  background: var(--color-cover-hover);
 }
 
 body:has(.mine .reveal:checked) .cell:has(.flag:checked).mine .cover {
