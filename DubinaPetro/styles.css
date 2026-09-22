@@ -1,5 +1,5 @@
 :root {
-  /* = кольори  інтерфейсу = */
+  /*кольори  інтерфейсу */
   --panel: #c6c6c6;
   --ink: #111111;
   --muted: #555555;
@@ -9,6 +9,9 @@
   --danger: #d44336;
   --danger-dark: #962519;
   --shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+  --board-columns: 8;
+  --cell-min: 28px;
+  --cell-min-mobile: 26px;
 }
 
 * {
@@ -67,7 +70,7 @@ button {
 }
 
 .status-panel {
-  /* чорне табло з червоними цифрами */
+  /* чорне табло з цифрами */
   display: grid;
   place-items: center;
   padding: 4px 7px;
@@ -134,7 +137,7 @@ button {
 .board {
   /* поле з рамкою */
   display: grid;
-  grid-template-columns: repeat(8, minmax(28px, 1fr));
+  grid-template-columns: repeat(var(--board-columns), minmax(var(--cell-min), 1fr));
   gap: 0;
   row-gap: 0;
   column-gap: 0;
@@ -232,6 +235,19 @@ button {
   image-rendering: pixelated;
 }
 
+.cell--flag.cell--mine::before {
+  inset: 14%;
+  background-image: url("assets/mine.png");
+}
+
+.cell--flag.cell--mine::after {
+  content: "";
+  position: absolute;
+  inset: 17%;
+  background: url("assets/flag.png") center / contain no-repeat;
+  image-rendering: pixelated;
+}
+
 .cell--question {
   color: #111111;
   content: "";
@@ -273,6 +289,6 @@ button {
   }
 
   .board {
-    grid-template-columns: repeat(8, minmax(26px, 1fr));
+    grid-template-columns: repeat(var(--board-columns), minmax(var(--cell-min-mobile), 1fr));
   }
 }
